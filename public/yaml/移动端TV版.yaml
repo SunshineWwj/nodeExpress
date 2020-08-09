@@ -1,0 +1,187 @@
+openapi: 3.0.0
+servers:
+  - url: "http://localhost:4010/dms/afterSales/api/v1"
+info:
+  title: 移动端TV版后台管理
+  description: 移动端TV版后台管理
+  version: 1.0.0
+paths:
+  "/dealerDeviceMessages":
+    get:
+      summary: 查询服务站设备信息
+      description: 服务站设备信息.服务站=当前登录企业，服务站设备信息.状态 = 生效
+      tags:
+        - DealerDeviceMessage
+      responses:
+        "200":
+          description: 服务站设备信息
+          content:
+            application/json:
+              schema:
+                required:
+                  - payload
+                properties:
+                  message:
+                    type: string
+                  payload:
+                    required:
+                      - content
+                    allOf:
+                      - properties:
+                          content:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/ListData"
+        "400":
+          $ref: "#/components/responses/Standard400ErrorResponse"
+    post:
+      summary: 新增服务站设备信息
+      tags:
+        - DealerDeviceMessage
+      responses:
+        "201":
+          $ref: "#/components/responses/Standard201SuccessResponse"
+        "400":
+          $ref: "#/components/responses/Standard400ErrorResponse"
+      requestBody:
+        $ref: "#/components/requestBodies/AddData"
+  "/dealerDeviceMessages/{id}":
+    put:
+      summary: 修改服务站设备信息
+      tags:
+        - DealerDeviceMessage
+      parameters:
+        - name: id
+          in: path
+          description: Id
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          $ref: "#/components/responses/Standard201SuccessResponse"
+        "400":
+          $ref: "#/components/responses/Standard400ErrorResponse"
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateData"
+components:
+  requestBodies:
+    UpdateData:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/detailData"
+    AddData:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/detailAddData"
+  responses:
+    Standard400ErrorResponse:
+      description: 失败.
+      content:
+        application/json:
+          schema:
+            required:
+              - errorCode
+              - message
+            properties:
+              errorCode:
+                type: string
+              message:
+                type: string
+    Standard200SuccessResponse:
+      description: 成功.
+      content:
+        application/json:
+          schema:
+            required:
+              - message
+            properties:
+              message:
+                type: string
+    Standard201SuccessResponse:
+      description: 成功创建.
+      content:
+        application/json:
+          schema:
+            required:
+              - message
+            properties:
+              message:
+                type: string
+  schemas:
+    ListData:
+      description: 列表
+      type: object
+      required:
+        - id
+      allOf:
+        - properties:
+            id:
+               description: 服务站设备信息数据行Id,guid类型的字符串
+               type: string
+        - $ref: "#/components/schemas/detailData"
+    detailData:
+      description: 列表
+      type: object
+      properties:
+        deviceIP:
+          description: 设备IP
+          type: string
+        devicePort:
+          description: 设备端口
+          type: string
+        userName:
+          description: 用户名称
+          type: string
+        password:
+          description: 用户密码
+          type: string
+        rowVersion:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/deviceDetail"
+    detailAddData:
+      description: 列表
+      type: object
+      properties:
+        deviceIP:
+          description: 设备IP
+          type: string
+        devicePort:
+          description: 设备端口
+          type: string
+        userName:
+          description: 用户名称
+          type: string
+        password:
+          description: 用户密码
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/deviceDetail"
+    deviceDetail:
+      description: 设备列表
+      type: object
+      properties:
+        deviceCode:
+          description: 通道号
+          type: string
+        deviceName:
+          description: 通道名称
+          type: string
+        deviceIP:
+          description: 设备Ip
+          type: string
+        devicePort:
+          description: 设备端口
+          type: string
+        deviceStatus:
+          description: 服务站视屏设备清单状态 |
+            1-启用
+            2-关闭
+          type: integer

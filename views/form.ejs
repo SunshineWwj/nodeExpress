@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name='viewport' content="with=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+    </head>
+    <body>
+        <%- include('common/header.ejs') -%>
+        <h2><%= data.age %></h2>
+        <h1>hobby</h1>
+        <ul>
+            <% data.hobbies.forEach(item=>{ %>
+                <li><%= item %></li>
+            <% }) %>
+            
+        </ul>
+        <h1>hello world</h1>
+    </body>
+</html>
